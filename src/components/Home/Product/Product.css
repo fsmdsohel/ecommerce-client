@@ -1,0 +1,20 @@
+.categoryId {
+  color: gray;
+  font-weight: 400;
+  text-decoration: none;
+}
+.product-color {
+  color: gray;
+  margin-bottom: 0;
+  font-weight: 400;
+  text-decoration: none;
+}
+.product-item {
+  text-decoration: none;
+}
+.displayName {
+  color: black;
+}
+.currentPrice {
+  color: black;
+}

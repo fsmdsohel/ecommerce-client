@@ -1,0 +1,17 @@
+.nova {
+  margin-left: 32px;
+}
+.horizental-line {
+  border-top: 3px solid rgb(219, 219, 219);
+  width: 100%;
+}
+.cart-icon {
+  font-size: 35px;
+  margin-right: 25px;
+}
+@media (min-width: 321px) and (max-width: 768px) {
+  .cart-icon {
+    display: flex;
+    justify-content: center;
+  }
+}
