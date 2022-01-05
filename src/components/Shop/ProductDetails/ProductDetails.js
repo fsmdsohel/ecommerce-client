@@ -9,7 +9,7 @@ const Product = () => {
   useEffect(() => {
     if (itemId) {
       fetch(
-        "https://5m6exoj3o7.execute-api.eu-west-1.amazonaws.com/prod/items?collection=winter2020&tag=sports"
+        "https://5m6exoj3o7.execute-api.eu-west-1.amazonaws.com/prod/items?fbclid=IwAR28tiBfhJtUGlHQjrH7J-tNuOPY9jMSp9ApWCiL_5jGTrqC0TZ_Y3C_9vs"
       )
         .then((res) => res.json())
         .then((data) => {

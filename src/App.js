@@ -1,14 +1,17 @@
-import "./App.css";
-import Navber from "./components/Shared/Navber/Navber";
+import axios from "axios";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
-import NotFound from "./components/Shared/NotFound/NotFound";
-import Home from "./components/Home/Home/Home";
-import ProductDetails from "./components/Shop/ProductDetails/ProductDetails";
 import { Container } from "react-bootstrap";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import "./App.css";
+import Home from "./components/Home/Home";
+import Navber from "./components/Shared/Navber/Navber";
+import NotFound from "./components/Shared/NotFound/NotFound";
 import CartItems from "./components/Shop/CartItems/CartItems";
+import ProductDetails from "./components/Shop/ProductDetails/ProductDetails";
 
 function App() {
+  axios.defaults.baseURL =
+    "https://5m6exoj3o7.execute-api.eu-west-1.amazonaws.com/";
   return (
     <>
       <BrowserRouter>
