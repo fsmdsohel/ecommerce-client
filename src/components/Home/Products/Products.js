@@ -11,7 +11,9 @@ const Products = ({ allProducts }) => {
           <h4>Product Not Found</h4>
         ) : (
           allProducts.map((productItem, index) => {
-            return <Product key={index} data={productItem}></Product>;
+            return (
+              <Product key={productItem.itemId} data={productItem}></Product>
+            );
           })
         )}
       </Row>

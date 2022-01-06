@@ -1,11 +1,14 @@
 import { useEffect, useState } from "react";
 import { Carousel, Col, Row } from "react-bootstrap";
 import { useParams } from "react-router-dom";
+import { CartState } from "../../../context/Context";
 import "./ProductDetails.css";
 
 const Product = () => {
+  const { dispatch, state } = CartState();
   const { itemId } = useParams();
   const [productDetails, setproductDetails] = useState({});
+  const [availableActive, setAvailableActive] = useState("");
   useEffect(() => {
     if (itemId) {
       fetch(
@@ -23,9 +26,36 @@ const Product = () => {
               details.picture,
             ],
           });
+
+          const availableSize = details.availableSizes;
+
+          const activeSizeArr = ["m", "s", "l", "xs", "xl", "xxl"];
+          let availableSizeChr = "";
+          let i = 0;
+
+          const selectActive = (chr) => {
+            for (let i = 0; i < availableSize.length; i++) {
+              if (availableSize[i].toLowerCase() === chr) {
+                availableSizeChr = availableSize[i];
+              }
+            }
+
+            if (availableSizeChr.length === 0) {
+              i = i + 1;
+              selectActive(activeSizeArr[i]);
+              return;
+            }
+          };
+
+          selectActive(activeSizeArr[i]);
+          setAvailableActive(availableSizeChr);
         });
     }
   }, [itemId]);
+
+  const handleAvailableSize = (val) => {
+    setAvailableActive(val);
+  };
   return (
     <>
       <Row>
@@ -61,12 +91,44 @@ const Product = () => {
 
             <h5 className="fw-bold">Select Size</h5>
             <div className="product-size mt-3">
-              {productDetails?.availableSizes?.map((item) => (
-                <button className="btn-size">{item}</button>
-              ))}
+              {productDetails?.availableSizes?.map((item) => {
+                return (
+                  <button
+                    onClick={() => {
+                      handleAvailableSize(item);
+                    }}
+                    className={`btn-size ${
+                      item.toLowerCase() === availableActive.toLowerCase()
+                        ? "active"
+                        : ""
+                    }`}
+                  >
+                    {item}
+                  </button>
+                );
+              })}
             </div>
 
-            <button className="addtoBag mt-3">Add to Bag</button>
+            <button
+              onClick={() => {
+                if (
+                  !state.cart.find((item) => item.id === productDetails.itemId)
+                ) {
+                  dispatch({
+                    type: "ADD_TO_CART",
+                    payload: {
+                      id: productDetails.itemId,
+                      size: availableActive,
+                    },
+                  });
+                } else {
+                  alert("this product already added");
+                }
+              }}
+              className="addtoBag mt-3"
+            >
+              Add to Bag
+            </button>
             <br />
             <button className="favourite mt-3">Favourite</button>
             <h5 className="fw-bold mt-5">Description</h5>
