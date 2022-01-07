@@ -1,11 +1,13 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
+import { CartState } from "../../context/Context";
 import Catagories from "./Catagories/Catagories";
 import Collections from "./Collections/Collections";
 import Products from "./Products/Products";
 import Tags from "./Tags/Tags";
 
 const Home = () => {
+  const { setProductLoading } = CartState();
   const [collectionData, setCollectionData] = useState([]);
   const [categoriesData, setCategoriesData] = useState([]);
   const [tagsData, setTagsData] = useState([]);
@@ -138,12 +140,14 @@ const Home = () => {
   };
 
   useEffect(() => {
+    setProductLoading(true);
     axios.get(`/prod/items${url}`).then((res) => {
       if (res.data !== undefined) {
         setAllProducts(res.data);
+        setProductLoading(false);
       }
     });
-  }, [url]);
+  }, [url, setProductLoading]);
 
   return (
     <>

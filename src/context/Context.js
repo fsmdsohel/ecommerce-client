@@ -13,12 +13,15 @@ const Cart = createContext();
 
 const Context = ({ children }) => {
   const [product, setProduct] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [productLoading, setProductLoading] = useState(true);
 
   const [state, dispatch] = useReducer(cartReducer, {
     cart: [],
   });
 
   useEffect(() => {
+    setLoading(true);
     const getData = getCart();
     if (getData) {
       dispatch({
@@ -29,12 +32,22 @@ const Context = ({ children }) => {
 
     axios.get("/prod/items").then((res) => {
       setProduct(res.data);
+      setLoading(false);
     });
   }, []);
 
-  console.log(state);
   return (
-    <Cart.Provider value={{ state, dispatch, product }}>
+    <Cart.Provider
+      value={{
+        state,
+        dispatch,
+        product,
+        loading,
+        setLoading,
+        productLoading,
+        setProductLoading,
+      }}
+    >
       {children}
     </Cart.Provider>
   );

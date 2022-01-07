@@ -1,22 +1,40 @@
 import React from "react";
 import { Row } from "react-bootstrap";
+import { CartState } from "../../../context/Context";
 import Product from "../Product/Product";
 import "./Products.css";
 
 const Products = ({ allProducts }) => {
+  const { productLoading } = CartState();
   return (
     <>
-      <Row xs={1} md={2} lg={4} className="g-3 m-5">
-        {allProducts.length === 0 ? (
-          <h4>Product Not Found</h4>
+      <div className={`products_container ${productLoading ? "active" : ""}`}>
+        {productLoading ? (
+          <div className="products_spinner">
+            <div className="swapping-squares-spinner">
+              <div className="square"></div>
+              <div className="square"></div>
+              <div className="square"></div>
+              <div className="square"></div>
+            </div>
+          </div>
         ) : (
-          allProducts.map((productItem, index) => {
-            return (
-              <Product key={productItem.itemId} data={productItem}></Product>
-            );
-          })
+          <Row xs={1} md={2} lg={4} className="g-3 m-5">
+            {allProducts.length === 0 ? (
+              <h4>Product Not Found</h4>
+            ) : (
+              allProducts.map((productItem, index) => {
+                return (
+                  <Product
+                    key={productItem.itemId}
+                    data={productItem}
+                  ></Product>
+                );
+              })
+            )}
+          </Row>
         )}
-      </Row>
+      </div>
     </>
   );
 };
