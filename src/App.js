@@ -1,6 +1,7 @@
 import axios from "axios";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Container } from "react-bootstrap";
+import { Toaster } from "react-hot-toast";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import "./App.css";
 import Home from "./components/Home/Home";
@@ -14,6 +15,7 @@ function App() {
     "https://5m6exoj3o7.execute-api.eu-west-1.amazonaws.com/";
   return (
     <>
+      <Toaster position="top-center" reverseOrder={false} />
       <BrowserRouter>
         <Navber />
         <Container fluid>

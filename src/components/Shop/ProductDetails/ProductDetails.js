@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Carousel, Col, Row } from "react-bootstrap";
+import toast from "react-hot-toast";
 import { useParams } from "react-router-dom";
 import { CartState } from "../../../context/Context";
 import "./ProductDetails.css";
@@ -111,8 +112,13 @@ const Product = () => {
 
             <button
               onClick={() => {
+                console.log(productDetails);
                 if (
-                  !state.cart.find((item) => item.id === productDetails.itemId)
+                  !state.cart.find(
+                    (item) =>
+                      item.id === productDetails.itemId &&
+                      item.size === availableActive
+                  )
                 ) {
                   dispatch({
                     type: "ADD_TO_CART",
@@ -122,7 +128,7 @@ const Product = () => {
                     },
                   });
                 } else {
-                  alert("this product already added");
+                  toast.error("This item allready added!");
                 }
               }}
               className="addtoBag mt-3"
