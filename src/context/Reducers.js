@@ -11,13 +11,36 @@ export const cartReducer = (state, action) => {
         ...state,
         cart: newCart,
       };
+    case "CART_PRODUCT_QUANTITY":
+      const modifiredQty = [];
+      state.cart.forEach((pditem) => {
+        if (
+          pditem.id === action.payload.id &&
+          pditem.size === action.payload.size
+        ) {
+          pditem.qty = action.payload.qty;
+        }
+        modifiredQty.push(pditem);
+      });
+      setCart(modifiredQty);
+
+      return {
+        ...state,
+        cart: modifiredQty,
+      };
     case "LOAD_CART_DATA":
       return {
         cart: action.payload,
       };
     case "REMOVE_FROM_CART":
-      const rmCart = state.cart.filter((item) => item.id != action.payload.id);
+      const rmCart = state.cart.filter((item) => {
+        let status =
+          action.payload.id === item.id && action.payload.size === item.size;
+        return !status;
+      });
       setCart(rmCart);
+      toast.success("Successfully Cart Delete!");
+
       return {
         ...state,
         cart: rmCart,

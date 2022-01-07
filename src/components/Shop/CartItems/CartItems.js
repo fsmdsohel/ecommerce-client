@@ -7,6 +7,7 @@ const CartItems = () => {
   const {
     state: { cart },
     product,
+    dispatch,
   } = CartState();
   const [cartData, setCartData] = useState([]);
   const [totalPrice, setTotalPrice] = useState(0);
@@ -20,7 +21,7 @@ const CartItems = () => {
         const findData = product.find(
           (productItem) => productItem.itemId === cartItem.id
         );
-        price = price + findData.currentPrice;
+        price = price + findData.currentPrice * cartItem.qty;
         setCart.push({
           price: findData.currentPrice,
           productName: findData.displayName,
@@ -34,6 +35,9 @@ const CartItems = () => {
       setTotalPrice(price);
       setCartData(setCart);
     }
+    if (cart.length === 0) {
+      setCartData([]);
+    }
   }, [cart, product]);
 
   const handleQtyInput = (id, size, smb) => {
@@ -44,6 +48,7 @@ const CartItems = () => {
           if (pd.quantity < 100) {
             let val = pd.quantity + 1;
             pd.quantity = val;
+            handleLocalStorage(id, size, val);
           } else {
             alert("limit cross");
           }
@@ -56,6 +61,7 @@ const CartItems = () => {
           if (pd.quantity > 1) {
             let val = pd.quantity - 1;
             pd.quantity = val;
+            handleLocalStorage(id, size, val);
           } else {
             alert("limit cross");
           }
@@ -68,6 +74,7 @@ const CartItems = () => {
           if (parseInt(smb)) {
             let val = parseInt(smb);
             pd.quantity = val;
+            handleLocalStorage(id, size, val);
           } else {
             alert("Minimum 1 value must have ");
           }
@@ -75,8 +82,25 @@ const CartItems = () => {
         modifiredData.push(pd);
       });
     }
+
     setCartData(modifiredData);
   };
+
+  const handleLocalStorage = (id, size, qty) => {
+    dispatch({
+      type: "CART_PRODUCT_QUANTITY",
+      payload: { id, size, qty },
+    });
+  };
+
+  const handleRemoveCart = (id, size) => {
+    dispatch({
+      type: "REMOVE_FROM_CART",
+      payload: { id, size },
+    });
+  };
+
+  // console.log(cartData.length == 0);
 
   return (
     <>
@@ -132,7 +156,6 @@ const CartItems = () => {
                             >
                               -
                             </button>
-
                             <input
                               onChange={(e) =>
                                 handleQtyInput(
@@ -155,7 +178,14 @@ const CartItems = () => {
                               +
                             </button>
                           </div>
-                          <div className="btn btn-danger">Remove</div>
+                          <button
+                            onClick={() =>
+                              handleRemoveCart(pditem.id, pditem.size)
+                            }
+                            className="btn btn-danger"
+                          >
+                            Remove
+                          </button>
                         </div>
                       </div>
                     </div>
@@ -175,6 +205,7 @@ const CartItems = () => {
             </button>
             <div id="item-box">
               <h1>box-3</h1>
+              <p>€{totalPrice.toFixed(2)}</p>
             </div>
           </div>
         </Col>

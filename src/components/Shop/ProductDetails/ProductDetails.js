@@ -10,8 +10,10 @@ const Product = () => {
   const { itemId } = useParams();
   const [productDetails, setproductDetails] = useState({});
   const [availableActive, setAvailableActive] = useState("");
+  const [loadData, setLoadData] = useState(false);
   useEffect(() => {
     if (itemId) {
+      setLoadData(false);
       fetch(
         "https://5m6exoj3o7.execute-api.eu-west-1.amazonaws.com/prod/items?fbclid=IwAR28tiBfhJtUGlHQjrH7J-tNuOPY9jMSp9ApWCiL_5jGTrqC0TZ_Y3C_9vs"
       )
@@ -50,6 +52,7 @@ const Product = () => {
 
           selectActive(activeSizeArr[i]);
           setAvailableActive(availableSizeChr);
+          setLoadData(true);
         });
     }
   }, [itemId]);
@@ -112,23 +115,24 @@ const Product = () => {
 
             <button
               onClick={() => {
-                console.log(productDetails);
-                if (
-                  !state.cart.find(
-                    (item) =>
-                      item.id === productDetails.itemId &&
-                      item.size === availableActive
-                  )
-                ) {
-                  dispatch({
-                    type: "ADD_TO_CART",
-                    payload: {
-                      id: productDetails.itemId,
-                      size: availableActive,
-                    },
-                  });
-                } else {
-                  toast.error("This item allready added!");
+                if (loadData) {
+                  if (
+                    !state.cart.find(
+                      (item) =>
+                        item.id === productDetails.itemId &&
+                        item.size === availableActive
+                    )
+                  ) {
+                    dispatch({
+                      type: "ADD_TO_CART",
+                      payload: {
+                        id: productDetails.itemId,
+                        size: availableActive,
+                      },
+                    });
+                  } else {
+                    toast.error("This item allready added!");
+                  }
                 }
               }}
               className="addtoBag mt-3"
